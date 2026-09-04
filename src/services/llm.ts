@@ -210,7 +210,7 @@ export async function streamChatResponse(
     return accumulated;
   } catch (err: any) {
     console.warn('Real API call failed, falling back to built-in persona engine:', err);
-    onDelta(`*(提示: 自定义 API 请求遇到问题: ${err.message}，已自动为您启用内置高保真思维模型引擎)*\n\n`);
+    onDelta(`*(提示: 自定义 API 请求遇到问题: ${err.message}，已自动为您启用内置引擎)*\n\n`);
     const fallbackText = generateBuiltinPersonaResponse(expert, messages, lang);
     onDelta(fallbackText);
     return fallbackText;

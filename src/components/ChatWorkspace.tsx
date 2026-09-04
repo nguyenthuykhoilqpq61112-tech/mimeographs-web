@@ -562,8 +562,8 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                 <span>
                   {llmSettings.provider === 'builtin'
                     ? lang === 'en'
-                      ? 'Engine: Free Built-in Persona'
-                      : '当前引擎：免费内置思维模型'
+                      ? 'Engine: Built-in Engine'
+                      : '当前引擎：内置引擎（内置密钥）'
                     : `API: ${llmSettings.provider} (${llmSettings.model})`}
                 </span>
                 <span className="text-slate-600 underline">

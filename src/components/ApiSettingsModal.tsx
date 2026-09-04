@@ -69,7 +69,7 @@ export const ApiSettingsModal: React.FC<ApiSettingsModalProps> = ({
                 {lang === 'en' ? 'AI Model & Key Settings' : '大模型与对话服务配置'}
               </h3>
               <p className="text-xs text-slate-400">
-                {lang === 'en' ? 'Optional: Connect your own LLM key' : '可选：支持直连大模型 API 或使用免费内置引擎'}
+                {lang === 'en' ? 'Optional: Connect your own LLM key' : '可选：支持直连大模型 API 或使用内置引擎'}
               </p>
             </div>
           </div>
@@ -100,10 +100,10 @@ export const ApiSettingsModal: React.FC<ApiSettingsModalProps> = ({
                 <Sparkles className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
                 <div>
                   <div className="font-bold text-cyan-300">
-                    {lang === 'en' ? 'Free Built-in Engine' : '免费内置引擎'}
+                    {lang === 'en' ? 'Built-in Engine' : '内置引擎'}
                   </div>
                   <div className="text-[10px] text-slate-400 mt-0.5">
-                    {lang === 'en' ? 'No key required' : '免配置 Key / 开箱即用'}
+                    {lang === 'en' ? 'Built-in Key' : '内置密钥'}
                   </div>
                 </div>
               </button>
