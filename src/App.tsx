@@ -9,8 +9,11 @@ import { HowToUse } from './components/HowToUse';
 import { BatchDock } from './components/BatchDock';
 import { Toast } from './components/Toast';
 import { Footer } from './components/Footer';
-import { ExpertSummary, Language } from './types';
+import { ChatWorkspace } from './components/ChatWorkspace';
+import { ApiSettingsModal } from './components/ApiSettingsModal';
+import { ExpertSummary, Language, LLMSettings } from './types';
 import catalogSummary from './data/summary.json';
+import { getStoredSettings } from './services/llm';
 
 export function App() {
   const [lang, setLang] = useState<Language>(() => {
@@ -18,16 +21,40 @@ export function App() {
     return (saved === 'zh' || saved === 'en') ? saved : 'zh';
   });
 
-  const [activeTab, setActiveTab] = useState<'catalog' | 'council' | 'guide'>('catalog');
-  // Initialize synchronously with pre-bundled catalog summary
+  // Default to 'chat' for immediate conversational experience!
+  const [activeTab, setActiveTab] = useState<'chat' | 'catalog' | 'council' | 'guide'>('chat');
+  const [currentChatSlug, setCurrentChatSlug] = useState<string>('steve-jobs');
   const [experts, setExperts] = useState<ExpertSummary[]>(catalogSummary.experts as ExpertSummary[]);
   const [selectedSlugs, setSelectedSlugs] = useState<string[]>([]);
   const [selectedExpertForModal, setSelectedExpertForModal] = useState<ExpertSummary | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [llmSettings, setLlmSettings] = useState<LLMSettings>(getStoredSettings());
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('mimeo_lang', lang);
   }, [lang]);
+
+  // Support hash routing (e.g. #/chat/steve-jobs or #/catalog)
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace('#/', '');
+      if (hash.startsWith('chat/')) {
+        const slug = hash.split('/')[1];
+        if (slug) setCurrentChatSlug(slug);
+        setActiveTab('chat');
+      } else if (hash === 'catalog') {
+        setActiveTab('catalog');
+      } else if (hash === 'council') {
+        setActiveTab('council');
+      } else if (hash === 'guide') {
+        setActiveTab('guide');
+      }
+    };
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
 
   const handleNotify = (msg: string) => {
     setToastMessage(msg);
@@ -61,17 +88,44 @@ export function App() {
     setSelectedSlugs([]);
   };
 
+  const handleOpenChatWithExpert = (exp: ExpertSummary) => {
+    setCurrentChatSlug(exp.slug);
+    setActiveTab('chat');
+    window.location.hash = `#/chat/${exp.slug}`;
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-cyan-500/30 selection:text-cyan-200">
       <Navbar
         lang={lang}
         setLang={setLang}
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={(tab) => {
+          setActiveTab(tab);
+          window.location.hash = `#/${tab}`;
+        }}
         selectedCount={selectedSlugs.length}
       />
 
-      <main className="flex-1">
+      <main className="flex-1 flex flex-col">
+        {/* 1. DIRECT CHAT STUDIO */}
+        {activeTab === 'chat' && (
+          <ChatWorkspace
+            experts={experts}
+            currentSlug={currentChatSlug}
+            onSelectExpert={(slug) => {
+              setCurrentChatSlug(slug);
+              window.location.hash = `#/chat/${slug}`;
+            }}
+            lang={lang}
+            onNotify={handleNotify}
+            llmSettings={llmSettings}
+            onOpenSettings={() => setIsSettingsOpen(true)}
+            onBackToCatalog={() => setActiveTab('catalog')}
+          />
+        )}
+
+        {/* 2. CATALOG BROWSER */}
         {activeTab === 'catalog' && (
           <>
             <Hero
@@ -94,6 +148,7 @@ export function App() {
               experts={experts}
               lang={lang}
               onOpenDetail={(exp) => setSelectedExpertForModal(exp)}
+              onOpenChat={handleOpenChatWithExpert}
               selectedSlugs={selectedSlugs}
               onToggleSelect={handleToggleSelect}
               onSelectAll={handleSelectAll}
@@ -103,6 +158,7 @@ export function App() {
           </>
         )}
 
+        {/* 3. PANTHEON MULTI-AGENT COUNCIL */}
         {activeTab === 'council' && (
           <CouncilRoom
             experts={experts}
@@ -113,19 +169,24 @@ export function App() {
           />
         )}
 
+        {/* 4. INTEGRATION GUIDE */}
         {activeTab === 'guide' && (
           <HowToUse lang={lang} onNotify={handleNotify} />
         )}
       </main>
 
-      <BatchDock
-        selectedSlugs={selectedSlugs}
-        lang={lang}
-        onClear={handleClearSelection}
-        onOpenCouncil={() => setActiveTab('council')}
-        onNotify={handleNotify}
-      />
+      {/* Floating dock when items are selected */}
+      {activeTab === 'catalog' && (
+        <BatchDock
+          selectedSlugs={selectedSlugs}
+          lang={lang}
+          onClear={handleClearSelection}
+          onOpenCouncil={() => setActiveTab('council')}
+          onNotify={handleNotify}
+        />
+      )}
 
+      {/* Expert Specs Modal */}
       <ExpertModal
         expertSummary={selectedExpertForModal}
         lang={lang}
@@ -133,9 +194,21 @@ export function App() {
         onNotify={handleNotify}
       />
 
+      {/* API Settings Modal */}
+      <ApiSettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        settings={llmSettings}
+        onSave={(newSettings) => {
+          setLlmSettings(newSettings);
+          handleNotify(lang === 'en' ? 'Settings saved!' : '设置已更新！');
+        }}
+        lang={lang}
+      />
+
       <Toast message={toastMessage} />
 
-      <Footer lang={lang} />
+      {activeTab !== 'chat' && <Footer lang={lang} />}
     </div>
   );
 }

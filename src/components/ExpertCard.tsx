@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, Check, Sparkles, Brain, Cpu, MessageSquareQuote } from 'lucide-react';
+import { Copy, Check, Sparkles, Brain, Cpu, MessageSquareQuote, MessageSquare } from 'lucide-react';
 import { ExpertSummary, Language } from '../types';
 import { getCategoryStyle, copyText, I18N } from '../utils';
 
@@ -7,6 +7,7 @@ interface ExpertCardProps {
   expert: ExpertSummary;
   lang: Language;
   onOpenDetail: (expert: ExpertSummary) => void;
+  onOpenChat: (expert: ExpertSummary) => void;
   isSelected: boolean;
   onToggleSelect: (slug: string) => void;
   onNotify: (msg: string) => void;
@@ -16,6 +17,7 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
   expert,
   lang,
   onOpenDetail,
+  onOpenChat,
   isSelected,
   onToggleSelect,
   onNotify,
@@ -37,11 +39,11 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
 
   return (
     <div
-      onClick={() => onOpenDetail(expert)}
-      className={`relative group rounded-2xl border bg-slate-900/50 p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer flex flex-col justify-between ${
+      onClick={() => onOpenChat(expert)}
+      className={`relative group rounded-2xl border bg-slate-900/50 p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer flex flex-col justify-between ${
         isSelected
           ? 'border-cyan-500/80 bg-slate-900/90 ring-1 ring-cyan-500 shadow-cyan-500/10'
-          : 'border-slate-800/80 hover:border-slate-700'
+          : 'border-slate-800/80 hover:border-cyan-500/40 hover:bg-slate-900/80'
       }`}
     >
       <div>
@@ -132,23 +134,38 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
+          {/* PRIMARY BUTTON: DIRECT CHAT */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenChat(expert);
+            }}
+            className="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-500 hover:from-cyan-400 hover:to-sky-400 text-slate-950 text-xs font-bold transition-all text-center flex items-center justify-center gap-1.5 shadow-md shadow-cyan-500/20"
+          >
+            <MessageSquare className="w-3.5 h-3.5 text-slate-950" />
+            <span>{lang === 'en' ? 'Chat Now' : '立即对话'}</span>
+          </button>
+
+          {/* Secondary: Inspect Mind / Specs */}
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
               onOpenDetail(expert);
             }}
-            className="flex-1 py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition-all text-center flex items-center justify-center gap-1.5 border border-slate-700/60 group-hover:border-cyan-500/40"
+            title={lang === 'en' ? 'Inspect Skills & Models' : '查看完整思维模型与规则'}
+            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs transition-colors"
           >
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>{t.inspect}</span>
+            <Brain className="w-4 h-4 text-purple-400" />
           </button>
 
+          {/* Copy npx command */}
           <button
             type="button"
             onClick={handleCopy}
             title={expert.install.npx}
-            className={`p-2 rounded-lg border text-xs font-medium transition-all ${
+            className={`p-2 rounded-xl border text-xs font-medium transition-all ${
               copied
                 ? 'bg-emerald-500 text-slate-950 border-emerald-400'
                 : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800 hover:border-slate-700'

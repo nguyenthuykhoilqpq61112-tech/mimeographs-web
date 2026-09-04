@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, LayoutGrid, List, Filter, X, Sparkles, CheckSquare, Square, Copy, Check } from 'lucide-react';
+import { Search, LayoutGrid, List, Filter, X, Sparkles, CheckSquare, Square, Copy, Check, MessageSquare } from 'lucide-react';
 import { ExpertSummary, Language, Category } from '../types';
 import { ExpertCard } from './ExpertCard';
 import { I18N, getCategoryStyle, copyText } from '../utils';
@@ -8,6 +8,7 @@ interface CatalogSectionProps {
   experts: ExpertSummary[];
   lang: Language;
   onOpenDetail: (expert: ExpertSummary) => void;
+  onOpenChat: (expert: ExpertSummary) => void;
   selectedSlugs: string[];
   onToggleSelect: (slug: string) => void;
   onSelectAll: (slugs: string[]) => void;
@@ -19,6 +20,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
   experts,
   lang,
   onOpenDetail,
+  onOpenChat,
   selectedSlugs,
   onToggleSelect,
   onSelectAll,
@@ -41,11 +43,9 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
 
   const filteredExperts = useMemo(() => {
     return experts.filter((exp) => {
-      // Category filter
       if (activeCategory !== 'All' && exp.category !== activeCategory) {
         return false;
       }
-      // Search filter
       if (!searchQuery.trim()) return true;
       const q = searchQuery.toLowerCase();
       const matchName = exp.name.toLowerCase().includes(q);
@@ -228,6 +228,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
               expert={expert}
               lang={lang}
               onOpenDetail={onOpenDetail}
+              onOpenChat={onOpenChat}
               isSelected={selectedSlugs.includes(expert.slug)}
               onToggleSelect={onToggleSelect}
               onNotify={onNotify}
@@ -247,7 +248,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                   <th className="py-3.5 px-4">{lang === 'en' ? 'Expert' : '专家'}</th>
                   <th className="py-3.5 px-4 hidden md:table-cell">{lang === 'en' ? 'Category' : '领域'}</th>
                   <th className="py-3.5 px-4">{lang === 'en' ? 'Reach for this when…' : '适用场景与核心思维'}</th>
-                  <th className="py-3.5 px-4 text-right">{lang === 'en' ? 'Install' : '安装命令'}</th>
+                  <th className="py-3.5 px-4 text-right">{lang === 'en' ? 'Actions' : '操作'}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">
@@ -258,7 +259,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                   return (
                     <tr
                       key={exp.slug}
-                      onClick={() => onOpenDetail(exp)}
+                      onClick={() => onOpenChat(exp)}
                       className={`cursor-pointer hover:bg-slate-800/40 transition-colors ${
                         isSelected ? 'bg-cyan-950/20' : ''
                       }`}
@@ -298,22 +299,25 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                         <p className="line-clamp-2 leading-relaxed">{exp.description}</p>
                       </td>
                       <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
-                        <button
-                          onClick={() => handleCopy(exp.install.npx, exp.slug)}
-                          className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono border border-slate-700 transition-colors inline-flex items-center gap-1.5"
-                        >
-                          {copiedSlug === exp.slug ? (
-                            <>
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => onOpenChat(exp)}
+                            className="px-2.5 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition-colors inline-flex items-center gap-1"
+                          >
+                            <MessageSquare className="w-3.5 h-3.5" />
+                            <span>{lang === 'en' ? 'Chat' : '对话'}</span>
+                          </button>
+                          <button
+                            onClick={() => handleCopy(exp.install.npx, exp.slug)}
+                            className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono border border-slate-700 transition-colors inline-flex items-center gap-1"
+                          >
+                            {copiedSlug === exp.slug ? (
                               <Check className="w-3.5 h-3.5 text-emerald-400" />
-                              <span className="text-emerald-400">Copied</span>
-                            </>
-                          ) : (
-                            <>
+                            ) : (
                               <Copy className="w-3.5 h-3.5 text-slate-400" />
-                              <span>npx</span>
-                            </>
-                          )}
-                        </button>
+                            )}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );

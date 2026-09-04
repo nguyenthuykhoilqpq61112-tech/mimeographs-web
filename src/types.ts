@@ -68,3 +68,21 @@ export type Category =
   | 'Scientists & researchers';
 
 export type Language = 'en' | 'zh';
+
+export type LLMProvider = 'builtin' | 'deepseek' | 'openai' | 'openrouter' | 'custom';
+
+export interface LLMSettings {
+  provider: LLMProvider;
+  apiKey: string;
+  baseUrl: string;
+  model: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  timestamp: number;
+  thought?: string;
+  referencedModel?: string;
+}

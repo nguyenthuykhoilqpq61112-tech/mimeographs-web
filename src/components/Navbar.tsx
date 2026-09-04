@@ -1,14 +1,14 @@
-import { GithubIcon } from "./GithubIcon";
 import React from 'react';
-import { Sparkles, Terminal, Users, BookOpen, Github, Globe } from 'lucide-react';
+import { Sparkles, Users, BookOpen, Globe, MessageSquare } from 'lucide-react';
 import { Language } from '../types';
 import { I18N } from '../utils';
+import { GithubIcon } from "./GithubIcon";
 
 interface NavbarProps {
   lang: Language;
   setLang: (l: Language) => void;
-  activeTab: 'catalog' | 'council' | 'guide';
-  setActiveTab: (tab: 'catalog' | 'council' | 'guide') => void;
+  activeTab: 'chat' | 'catalog' | 'council' | 'guide';
+  setActiveTab: (tab: 'chat' | 'catalog' | 'council' | 'guide') => void;
   selectedCount: number;
 }
 
@@ -26,7 +26,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
         <div 
-          onClick={() => setActiveTab('catalog')} 
+          onClick={() => setActiveTab('chat')} 
           className="flex items-center gap-3 cursor-pointer group"
         >
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 via-indigo-500 to-purple-600 p-[1px] shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition-all duration-300">
@@ -42,13 +42,25 @@ export const Navbar: React.FC<NavbarProps> = ({
               </span>
             </div>
             <p className="text-[11px] text-slate-400 -mt-0.5 hidden sm:block">
-              {lang === 'en' ? 'Curated Agent Skills & Personas' : 'AI Agent 专家思维模型库'}
+              {lang === 'en' ? 'Direct AI Chat & Skill Library' : '80位大师在线对话与智库'}
             </p>
           </div>
         </div>
 
         {/* Navigation Tabs */}
         <nav className="flex items-center gap-1 sm:gap-2">
+          <button
+            onClick={() => setActiveTab('chat')}
+            className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-1.5 ${
+              activeTab === 'chat'
+                ? 'bg-gradient-to-r from-cyan-500/20 to-sky-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+            }`}
+          >
+            <MessageSquare className="w-4 h-4 text-cyan-400" />
+            <span>{lang === 'en' ? 'Direct Chat' : '在线对话'}</span>
+          </button>
+
           <button
             onClick={() => setActiveTab('catalog')}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${
@@ -70,11 +82,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => setActiveTab('council')}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${
               activeTab === 'council'
-                ? 'bg-gradient-to-r from-purple-600/30 to-cyan-600/30 text-cyan-300 border border-cyan-500/30 shadow-sm'
+                ? 'bg-gradient-to-r from-purple-600/30 to-cyan-600/30 text-purple-300 border border-purple-500/30 shadow-sm'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
             }`}
           >
-            <Sparkles className="w-4 h-4 text-cyan-400" />
+            <Sparkles className="w-4 h-4 text-purple-400" />
             <span className="hidden sm:inline">{lang === 'en' ? 'Pantheon Council' : '圆桌研讨'}</span>
           </button>
 
