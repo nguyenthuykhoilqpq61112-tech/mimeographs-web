@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Sparkles, Users, Send, Loader2, Plus, X, MessageSquare, Copy, Check, ArrowRight } from 'lucide-react';
+import { Sparkles, Users, Send, Loader2, Plus, X, MessageSquare, Copy, Check, ArrowRight, Award } from 'lucide-react';
 import { ExpertSummary, Language } from '../types';
-import { I18N, copyText, getCategoryStyle } from '../utils';
+import { I18N, copyText, getCategoryStyle, formatCategory } from '../utils';
 
 interface CouncilRoomProps {
   experts: ExpertSummary[];

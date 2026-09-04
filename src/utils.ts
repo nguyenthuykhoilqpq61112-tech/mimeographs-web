@@ -1,4 +1,4 @@
-import { Category } from './types';
+import { Category, Language } from './types';
 
 export function getCategoryStyle(category: string) {
   switch (category) {

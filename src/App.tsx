@@ -37,14 +37,15 @@ export function App() {
   // Support hash routing (e.g. #/chat/steve-jobs or #/catalog)
   useEffect(() => {
     const handleHash = () => {
-      const hash = window.location.hash.replace('#/', '');
-      if (hash.startsWith('chat/')) {
-        const slug = hash.split('/')[1];
+      const rawHash = window.location.hash || '';
+      const cleanHash = rawHash.replace(/^#\/?/, '').replace(/\/+$/, '');
+      if (cleanHash.startsWith('chat/')) {
+        const slug = cleanHash.split('/')[1];
         if (slug) setCurrentChatSlug(slug);
         setActiveTab('chat');
-      } else if (hash === 'catalog') {
+      } else if (cleanHash === 'catalog') {
         setActiveTab('catalog');
-      } else if (hash === 'council') {
+      } else if (cleanHash === 'council') {
         setActiveTab('council');
       }
     };
