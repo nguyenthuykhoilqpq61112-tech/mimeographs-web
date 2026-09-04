@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Search, LayoutGrid, List, Filter, X, Sparkles, CheckSquare, Square, Copy, Check, MessageSquare } from 'lucide-react';
+import { Search, LayoutGrid, List, Filter, X, CheckSquare, Square, MessageSquare, Brain } from 'lucide-react';
 import { ExpertSummary, Language, Category } from '../types';
 import { ExpertCard } from './ExpertCard';
-import { I18N, getCategoryStyle, copyText } from '../utils';
+import { I18N, getCategoryStyle, formatCategory } from '../utils';
 
 interface CatalogSectionProps {
   experts: ExpertSummary[];
@@ -31,7 +31,6 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<Category>('All');
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
-  const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
 
   const categories: Category[] = [
     'All',
@@ -69,15 +68,6 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
       onClearSelection();
     } else {
       onSelectAll(filteredExperts.map((e) => e.slug));
-    }
-  };
-
-  const handleCopy = async (npxCmd: string, slug: string) => {
-    const ok = await copyText(npxCmd);
-    if (ok) {
-      setCopiedSlug(slug);
-      onNotify(`${lang === 'en' ? 'Copied' : '已复制'}: ${npxCmd}`);
-      setTimeout(() => setCopiedSlug(null), 2000);
     }
   };
 
@@ -155,14 +145,9 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
             const count =
               cat === 'All' ? experts.length : experts.filter((e) => e.category === cat).length;
 
-            let label = cat;
-            if (lang === 'zh') {
-              if (cat === 'All') label = '全部专家';
-              if (cat === 'Founders & operators') label = '创始人与商业领袖';
-              if (cat === 'Philosophers') label = '哲学家与思想家';
-              if (cat === 'AI & ML researchers') label = 'AI与机器学习学者';
-              if (cat === 'Scientists & researchers') label = '科学家与流行病学者';
-            }
+            const label = cat === 'All'
+              ? (lang === 'en' ? 'All Scholars' : '全部学者')
+              : formatCategory(cat, lang);
 
             return (
               <button
@@ -170,14 +155,14 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 border ${
                   isActive
-                    ? 'bg-cyan-500 text-slate-950 border-cyan-400 font-bold shadow-md shadow-cyan-500/20'
+                    ? 'bg-amber-500 text-slate-950 border-amber-400 font-bold shadow-md shadow-amber-500/20'
                     : 'bg-slate-900/60 hover:bg-slate-800/80 text-slate-400 hover:text-slate-200 border-slate-800'
                 }`}
               >
                 <span>{label}</span>
                 <span
                   className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
-                    isActive ? 'bg-slate-950/30 text-slate-950' : 'bg-slate-800 text-slate-400'
+                    isActive ? 'bg-slate-950/30 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'
                   }`}
                 >
                   {count}
@@ -292,7 +277,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                       </td>
                       <td className="py-3 px-4 hidden md:table-cell">
                         <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${catStyle.badge}`}>
-                          {exp.category}
+                          {formatCategory(exp.category, lang)}
                         </span>
                       </td>
                       <td className="py-3 px-4 text-slate-300 max-w-md">
@@ -308,14 +293,12 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                             <span>{lang === 'en' ? 'Chat' : '对话'}</span>
                           </button>
                           <button
-                            onClick={() => handleCopy(exp.install.npx, exp.slug)}
-                            className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono border border-slate-700 transition-colors inline-flex items-center gap-1"
+                            onClick={() => onOpenDetail(exp)}
+                            className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition-colors inline-flex items-center gap-1"
+                            title={lang === 'en' ? 'View Blueprint' : '研读蓝图'}
                           >
-                            {copiedSlug === exp.slug ? (
-                              <Check className="w-3.5 h-3.5 text-emerald-400" />
-                            ) : (
-                              <Copy className="w-3.5 h-3.5 text-slate-400" />
-                            )}
+                            <Brain className="w-3.5 h-3.5 text-purple-400" />
+                            <span>{lang === 'en' ? 'Blueprint' : '蓝图'}</span>
                           </button>
                         </div>
                       </td>

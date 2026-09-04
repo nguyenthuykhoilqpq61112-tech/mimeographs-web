@@ -74,115 +74,135 @@ export async function copyText(text: string): Promise<boolean> {
   }
 }
 
+export function formatCategory(cat: string, lang: Language): string {
+  if (lang === 'en') {
+    switch (cat) {
+      case 'Founders & operators': return 'Founders & Operators';
+      case 'Philosophers': return 'Philosophers';
+      case 'AI & ML researchers': return 'AI & ML Researchers';
+      case 'Scientists & researchers': return 'Scientists & Scholars';
+      default: return cat;
+    }
+  }
+  switch (cat) {
+    case 'Founders & operators': return '商业领袖与实业家';
+    case 'Philosophers': return '哲学家与思想家';
+    case 'AI & ML researchers': return '人工智能学者';
+    case 'Scientists & researchers': return '前沿科学家与学者';
+    default: return cat;
+  }
+}
+
+export function formatCategoryShort(cat: string, lang: Language): string {
+  if (lang === 'en') {
+    switch (cat) {
+      case 'All': return 'All';
+      case 'Founders & operators': return 'Founders';
+      case 'Philosophers': return 'Philosophers';
+      case 'AI & ML researchers': return 'AI & ML';
+      case 'Scientists & researchers': return 'Scientists';
+      default: return cat;
+    }
+  }
+  switch (cat) {
+    case 'All': return '全部';
+    case 'Founders & operators': return '商业领袖';
+    case 'Philosophers': return '哲学思想';
+    case 'AI & ML researchers': return '人工智能';
+    case 'Scientists & researchers': return '前沿科学';
+    default: return cat;
+  }
+}
+
 export const I18N = {
   en: {
-    heroBadge: "K-Dense-AI / Mimeographs",
-    heroTitlePrefix: "Clone ",
-    heroTitleHighlight: "80 Masterminds",
-    heroTitleSuffix: " into Your AI Agents",
-    heroSubtitle: "Curated agent skills (`SKILL.md` + `AGENTS.md`) capturing the frameworks, mental models, and decision heuristics of top founders, philosophers, and scientists. Compatible with Claude Code, Cursor, Codex, and Gemini CLI.",
-    exploreCatalog: "Explore 80 Experts",
-    enterCouncil: "Pantheon Council (Multi-AI)",
-    copyAllCmd: "Install All 80 Experts",
-    copiedAll: "Copied install command for all 80 experts!",
-    searchPlaceholder: "Search experts, mental models, 'loss curve', 'circle of competence'...",
-    filterAll: "All Minds",
+    brandName: "SCHOLARMIND",
+    brandBadge: "80 Scholars",
+    brandSubtitle: "Intellectual Archive & Direct Dialogue",
+    heroTitlePrefix: "Dialogue with ",
+    heroTitleHighlight: "80 Masterminds & Scholars",
+    heroTitleSuffix: " Across History",
+    heroSubtitle: "Curated intellectual archive capturing the mental models, reasoning heuristics, and decision frameworks of foundational philosophers, scientists, and visionary leaders. Engage in one-on-one deep conversations or convene multi-expert roundtable debates.",
+    exploreCatalog: "Browse 80 Scholars",
+    enterCouncil: "Convene Roundtable Council",
+    searchPlaceholder: "Search by scholar name, mental model, or keyword (e.g. First Principles, Circle of Competence)...",
+    filterAll: "All Scholars",
     filterFounders: "Founders & Operators",
     filterPhilosophers: "Philosophers",
     filterAI: "AI & ML Researchers",
     filterScientists: "Scientists & Researchers",
     showingCount: "Showing",
     of: "of",
-    experts: "experts",
-    inspect: "Inspect Mind",
+    experts: "scholars",
+    inspect: "Inspect Blueprint",
     selectToBatch: "Select",
     selected: "selected",
-    copyBatchNpx: "Copy npx Add",
     clearSelection: "Clear",
-    launchCouncil: "Debate in Council",
-    gridView: "Grid Cards",
-    tableView: "Compact Index",
-    presetBundles: "Curated Dream Teams",
+    launchCouncil: "Start Council Debate",
+    gridView: "Cards",
+    tableView: "Index Table",
+    presetBundles: "Curated Scholar Circles",
     bundleUnicorns: "Silicon Valley Founders",
     bundleAGI: "Frontier AGI Pioneers",
     bundleWisdom: "Philosophy & First Principles",
     bundleBio: "Life Science Innovators",
     mentalModels: "Mental Models",
-    frameworks: "Frameworks",
+    frameworks: "Decision Frameworks",
     principles: "Core Principles",
-    quotes: "Quotes",
-    behavioralAgent: "Always-On System Prompt (AGENTS.md)",
-    skillGuide: "On-Demand Skill (SKILL.md)",
-    reachForWhen: "Reach for this when...",
-    quickInstall: "Quick Install",
-    copyNpx: "Copy npx command",
-    copyGh: "Copy gh command",
-    copyAgentPrompt: "Copy AGENTS.md",
-    consultThisMind: "Ask This Mind",
-    councilTitle: "The Pantheon Council Room",
-    councilSubtitle: "Convene up to 4 historical & modern masterminds to debate your question from distinct mental models.",
-    askPlaceholder: "Ask a dilemma (e.g., 'Should our AI startup open-source our weights or build a closed SaaS?')",
-    generateAdvice: "Convene Council",
-    simulatedAdvice: "Authentic Persona Heuristics",
-    byokSettings: "API Key (Optional)",
-    howToUse: "How to Integrate into Your Workflow",
-    howToUseSub: "Seamless integration across modern agent-first coding environments.",
+    quotes: "Quotes & Maxims",
+    consultThisMind: "Consult This Scholar",
+    councilTitle: "Thinkers Roundtable Council",
+    councilSubtitle: "Select up to 4 historical and contemporary scholars to deliberate your dilemma based on their distinct mental models.",
+    askPlaceholder: "Pose a decision dilemma (e.g., 'Should an early-stage startup focus strictly on product simplicity or match competitor feature depth?')",
+    generateAdvice: "Convene Deliberation",
+    simulatedAdvice: "Heuristic Deliberation Output",
+    byokSettings: "Model Settings",
     close: "Close",
-    loading: "Loading expert details...",
+    loading: "Loading scholar details...",
   },
   zh: {
-    heroBadge: "K-Dense-AI / Mimeographs 镜像站与智库平台",
-    heroTitlePrefix: "将 ",
-    heroTitleHighlight: "80 位世界级大师",
-    heroTitleSuffix: " 的思维模型注入你的 AI Agent",
-    heroSubtitle: "精选的 Agent 专家技能库（`SKILL.md` 与 `AGENTS.md`），提炼顶级创始人、哲学家与科学家的决策框架、心智模型与反脆弱法则。无缝支持 Claude Code、Cursor、Codex 及 Gemini CLI。",
-    exploreCatalog: "浏览 80 位智库专家",
-    enterCouncil: "万神殿多专家圆桌研讨",
-    copyAllCmd: "一键安装全部 80 位专家",
-    copiedAll: "已复制全量 80 位专家的安装命令！",
-    searchPlaceholder: "输入名字、心智模型、关键词（如 护城河、第一性原理、损失曲线、护城河）...",
-    filterAll: "全部专家",
-    filterFounders: "创始人与商业领袖",
+    brandName: "博雅智库",
+    brandBadge: "80 位思想先驱",
+    brandSubtitle: "思想先驱与学术大师智库",
+    heroTitlePrefix: "与 ",
+    heroTitleHighlight: "80 位跨时代思想家与学者",
+    heroTitleSuffix: " 展开深度思维对话",
+    heroSubtitle: "系统提炼 80 位跨时代先哲、科学家、哲学家与商业领袖的心智模型与决策法则，支持一对一深度提问沉浸交流，或发起多学者跨学科圆桌思辨研讨。",
+    exploreCatalog: "浏览 80 位智库学者",
+    enterCouncil: "发起先贤圆桌研讨",
+    searchPlaceholder: "按学者姓名、心智模型或关键词搜索（如 第一性原理、能力圈、有效利他）...",
+    filterAll: "全部学者",
+    filterFounders: "商业领袖与实业家",
     filterPhilosophers: "哲学家与思想家",
-    filterAI: "AI与机器学习科学家",
+    filterAI: "人工智能学者",
     filterScientists: "前沿科学家与学者",
-    showingCount: "已显示",
+    showingCount: "已呈现",
     of: "/",
-    experts: "位专家",
-    inspect: "探究思维模型",
-    selectToBatch: "选择",
-    selected: "已勾选",
-    copyBatchNpx: "复制批量安装命令 (npx)",
-    clearSelection: "清空选择",
-    launchCouncil: "进入圆桌研讨",
+    experts: "位学者",
+    inspect: "查阅思维蓝图",
+    selectToBatch: "勾选",
+    selected: "位已选",
+    clearSelection: "清空",
+    launchCouncil: "开启圆桌思辨研讨",
     gridView: "卡片网格",
     tableView: "紧凑目录",
-    presetBundles: "精选大师智囊团",
-    bundleUnicorns: "硅谷传奇创始人团队",
-    bundleAGI: "AGI 前沿开拓者团队",
-    bundleWisdom: "第一性原理与哲学大师",
-    bundleBio: "生命科学与医学开拓者",
-    mentalModels: "心智模型 (Mental Models)",
-    frameworks: "实战框架 (Frameworks)",
-    principles: "核心原则 (Principles)",
-    quotes: "金句与真知 (Quotes)",
-    behavioralAgent: "全天候系统提示词 (AGENTS.md)",
-    skillGuide: "按需触发技能说明 (SKILL.md)",
-    reachForWhen: "何时选用此技能：",
-    quickInstall: "一键安装命令",
-    copyNpx: "复制 npx 命令",
-    copyGh: "复制 gh 命令",
-    copyAgentPrompt: "复制 AGENTS.md 全文",
-    consultThisMind: "咨询该专家",
-    councilTitle: "万神殿 (Pantheon) 多专家圆桌研讨室",
-    councilSubtitle: "挑选 1 至 4 位历史与当代大师，针对你的实际决策或难题，基于他们真实的心智模型展开碰撞与多角度分析。",
-    askPlaceholder: "输入你要咨询的问题（例如：“作为初创团队，我们应该开源核心模型还是做封闭商业闭环？”）",
-    generateAdvice: "召开圆桌研讨",
-    simulatedAdvice: "大师原则启发式研讨",
-    byokSettings: "API Key 设置 (可选)",
-    howToUse: "如何接入你的开发工作流",
-    howToUseSub: "支持主流 AI Agent 开发环境，开箱即用。",
+    presetBundles: "特邀名家智囊团",
+    bundleUnicorns: "实业与科技领袖",
+    bundleAGI: "人工智能开拓者",
+    bundleWisdom: "第一性原理与哲学先哲",
+    bundleBio: "生命科学与医学学者",
+    mentalModels: "心智模型",
+    frameworks: "决策框架",
+    principles: "核心原则",
+    quotes: "箴言与名著摘录",
+    consultThisMind: "向该学者咨询",
+    councilTitle: "学者先哲圆桌思辨室",
+    councilSubtitle: "挑选 1 至 4 位历史与当代大师，针对您的核心决策困境，基于各自坚守的心智模型展开跨学科思辨研讨。",
+    askPlaceholder: "输入您要探讨的核心问题（例如：“在资源极其受限的早期阶段，应坚守极致产品打磨还是加速功能铺开抢占市场？”）",
+    generateAdvice: "发起研讨",
+    simulatedAdvice: "学者启发式思辨建言",
+    byokSettings: "模型设置",
     close: "关闭",
-    loading: "正在加载专家详细思维模型...",
+    loading: "正在调阅学者思维蓝图...",
   }
 };

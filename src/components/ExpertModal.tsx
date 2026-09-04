@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   X,
-  Copy,
-  Check,
   Brain,
   Cpu,
   MessageSquareQuote,
-  Terminal,
-  FileCode,
   BookOpen,
   Sparkles,
   Send,
@@ -15,7 +11,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { ExpertSummary, ExpertDetail, Language } from '../types';
-import { getCategoryStyle, copyText, I18N } from '../utils';
+import { getCategoryStyle, I18N, formatCategory } from '../utils';
 
 interface ExpertModalProps {
   expertSummary: ExpertSummary | null;
@@ -33,9 +29,8 @@ export const ExpertModal: React.FC<ExpertModalProps> = ({
   const [detail, setDetail] = useState<ExpertDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<
-    'models' | 'frameworks' | 'principles' | 'quotes' | 'agents' | 'chat'
+    'models' | 'frameworks' | 'principles' | 'quotes' | 'chat'
   >('models');
-  const [copiedType, setCopiedType] = useState<string | null>(null);
 
   // Chat state
   const [chatQuestion, setChatQuestion] = useState('');
@@ -66,15 +61,6 @@ export const ExpertModal: React.FC<ExpertModalProps> = ({
 
   const catStyle = getCategoryStyle(expertSummary.category);
 
-  const handleCopyCommand = async (text: string, type: string) => {
-    const ok = await copyText(text);
-    if (ok) {
-      setCopiedType(type);
-      onNotify(`${lang === 'en' ? 'Copied' : '已复制'}: ${type}`);
-      setTimeout(() => setCopiedType(null), 2000);
-    }
-  };
-
   const handleAskQuestion = (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatQuestion.trim() || isThinking || !detail) return;
@@ -102,7 +88,7 @@ export const ExpertModal: React.FC<ExpertModalProps> = ({
         if (quote) {
           response += `\n> 正如我常说的：${quote}\n\n`;
         }
-        response += `### 行动建议：\n推翻现有假设，从最严苛的标准审视这件事情。如果你要将这个思维模型完整应用在你的代码库中，请直接运行安装命令注入到你的 Agent。`;
+        response += `### 行动建议：\n推翻先入为主的假设，从第一性原理和严密逻辑对方案进行压力测试，持续迭代并寻找破局点。`;
       } else {
         response = `Reasoning through the lens of **${detail.name}**:\n\n`;
         response += `Regarding your dilemma "${userQ}", I immediately evaluate this using **"${topModel}"**.\n\n`;
@@ -114,7 +100,7 @@ export const ExpertModal: React.FC<ExpertModalProps> = ({
         if (quote) {
           response += `\n> As I have always emphasized: ${quote}\n\n`;
         }
-        response += `### Concrete Action:\nCut down unproven complexity and test against reality immediately. You can install my complete decision skill into your agent with \`${detail.install.npx}\`.`;
+        response += `### Concrete Action:\nCut down unproven complexity, test your core assumptions against reality immediately, and iterate with discipline.`;
       }
 
       setChatHistory((prev) => [...prev, { role: 'assistant', text: response }]);
@@ -136,7 +122,7 @@ export const ExpertModal: React.FC<ExpertModalProps> = ({
             <div>
               <div className="flex flex-wrap items-center gap-2 mb-1.5">
                 <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${catStyle.badge}`}>
-                  {expertSummary.category}
+                  {formatCategory(expertSummary.category, lang)}
                 </span>
                 <span className="text-xs text-slate-500 font-mono">
                   slug: {expertSummary.slug}
@@ -157,32 +143,6 @@ export const ExpertModal: React.FC<ExpertModalProps> = ({
           >
             <X className="w-5 h-5" />
           </button>
-        </div>
-
-        {/* Quick Install Strip */}
-        <div className="px-5 sm:px-6 py-3 bg-slate-950 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2 overflow-x-auto font-mono text-slate-300">
-            <span className="text-cyan-400 font-bold">$</span>
-            <span className="truncate">{expertSummary.install.npx}</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => handleCopyCommand(expertSummary.install.npx, 'npx')}
-              className="px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
-            >
-              {copiedType === 'npx' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedType === 'npx' ? 'Copied npx' : 'Copy npx'}</span>
-            </button>
-
-            <button
-              onClick={() => handleCopyCommand(expertSummary.install.gh, 'gh')}
-              className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center gap-1 transition-colors border border-slate-700"
-            >
-              {copiedType === 'gh' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>gh CLI</span>
-            </button>
-          </div>
         </div>
 
         {/* Navigation Tabs */}
@@ -237,18 +197,6 @@ export const ExpertModal: React.FC<ExpertModalProps> = ({
             <MessageSquareQuote className="w-4 h-4" />
             <span>{t.quotes}</span>
             {detail && <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-400">{detail.quotes.length}</span>}
-          </button>
-
-          <button
-            onClick={() => setActiveTab('agents')}
-            className={`pb-3 px-3 border-b-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
-              activeTab === 'agents'
-                ? 'border-cyan-400 text-cyan-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            <FileCode className="w-4 h-4" />
-            <span>AGENTS.md</span>
           </button>
 
           <button
@@ -366,30 +314,7 @@ export const ExpertModal: React.FC<ExpertModalProps> = ({
                 </div>
               )}
 
-              {/* Tab 5: AGENTS.md */}
-              {activeTab === 'agents' && (
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-xs text-slate-400">
-                      {lang === 'en'
-                        ? 'Place this file as AGENTS.md in your project root to keep this persona always active.'
-                        : '将此内容保存为项目根目录的 AGENTS.md，即可全天候生效此专家的思维与审查标准。'}
-                    </p>
-                    <button
-                      onClick={() => handleCopyCommand(detail.agents.full, 'agents_md')}
-                      className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold flex items-center gap-1.5 border border-slate-700"
-                    >
-                      {copiedType === 'agents_md' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                      <span>{t.copyAgentPrompt}</span>
-                    </button>
-                  </div>
-                  <pre className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 overflow-x-auto whitespace-pre-wrap max-h-[500px]">
-                    {detail.agents.full}
-                  </pre>
-                </div>
-              )}
-
-              {/* Tab 6: Interactive Mind Consultation */}
+              {/* Tab 5: Interactive Mind Consultation */}
               {activeTab === 'chat' && (
                 <div className="flex flex-col h-full min-h-[350px]">
                   <div className="flex-1 overflow-y-auto space-y-4 mb-4">

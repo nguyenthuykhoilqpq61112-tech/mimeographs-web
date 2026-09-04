@@ -110,9 +110,9 @@ export const CouncilRoom: React.FC<CouncilRoomProps> = ({
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Title */}
       <div className="text-center max-w-3xl mx-auto mb-10">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-950/80 border border-purple-800 text-xs font-semibold text-purple-300 mb-3 shadow-sm">
-          <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-          <span>{lang === 'en' ? 'Multi-Agent Pantheon' : '万神殿多专家研讨机制'}</span>
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-950/70 border border-amber-800 text-xs font-semibold text-amber-300 mb-3 shadow-sm">
+          <Award className="w-3.5 h-3.5 text-amber-400" />
+          <span>{lang === 'en' ? 'Cross-Disciplinary Thinkers Council' : '先贤跨学科圆桌研讨'}</span>
         </div>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
           {t.councilTitle}
@@ -191,8 +191,8 @@ export const CouncilRoom: React.FC<CouncilRoomProps> = ({
                       <div className="font-bold text-white text-xs truncate group-hover:text-cyan-300">
                         {member.name}
                       </div>
-                      <div className="text-[10px] text-slate-400 truncate font-mono">
-                        {member.category}
+                      <div className="text-[10px] text-slate-400 truncate">
+                        {formatCategory(member.category, lang)}
                       </div>
                     </div>
                   </div>
@@ -338,7 +338,7 @@ export const CouncilRoom: React.FC<CouncilRoomProps> = ({
                       <div>
                         <h4 className="font-extrabold text-white text-base">{resp.name}</h4>
                         <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${catStyle.badge}`}>
-                          {resp.category}
+                          {formatCategory(resp.category, lang)}
                         </span>
                       </div>
                     </div>
@@ -346,10 +346,6 @@ export const CouncilRoom: React.FC<CouncilRoomProps> = ({
                     <div className="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line">
                       {resp.content}
                     </div>
-                  </div>
-
-                  <div className="mt-4 pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400 font-mono">
-                    <span>npx skills add K-Dense-AI/mimeographs/{resp.slug}</span>
                   </div>
                 </div>
               );

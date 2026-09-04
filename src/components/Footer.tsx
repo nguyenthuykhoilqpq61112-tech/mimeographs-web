@@ -1,31 +1,37 @@
 import React from 'react';
-import { Sparkles } from 'lucide-react';
+import { Landmark } from 'lucide-react';
 import { Language } from '../types';
+import { I18N } from '../utils';
 
 interface FooterProps {
   lang: Language;
 }
 
 export const Footer: React.FC<FooterProps> = ({ lang }) => {
+  const t = I18N[lang];
+
   return (
     <footer className="w-full border-t border-slate-800/80 bg-slate-950/90 py-8 text-slate-400 text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span className="font-extrabold text-white text-base tracking-tight">MIMEOGRAPHS</span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 font-semibold">
-              80 Minds
+            <div className="w-6 h-6 rounded-lg bg-slate-900 border border-amber-500/30 flex items-center justify-center">
+              <Landmark className="w-3.5 h-3.5 text-amber-400" />
+            </div>
+            <span className="font-extrabold text-white text-base tracking-tight font-serif">{t.brandName}</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30 font-semibold">
+              {t.brandBadge}
             </span>
           </div>
           <p className="text-slate-400 text-xs text-center sm:text-right">
             {lang === 'en'
-              ? 'A collection of 80 ready-to-use agent skills cloning the thinking of thinkers and leaders.'
-              : '收录 80 位思想家与行业领袖的思维模型智库，全方位赋能 AI 智能体对话。'}
+              ? 'Curated intellectual archive of 80 historical and contemporary thinkers, philosophers, and scientists.'
+              : '收录 80 位跨时代先哲、科学家、哲学家与行业领袖的思维模型智库。'}
           </p>
         </div>
       </div>
     </footer>
   );
 };
+
 

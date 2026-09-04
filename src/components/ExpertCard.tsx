@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Copy, Check, Sparkles, Brain, Cpu, MessageSquareQuote, MessageSquare } from 'lucide-react';
+import { Check, Sparkles, Brain, Cpu, MessageSquareQuote, MessageSquare } from 'lucide-react';
 import { ExpertSummary, Language } from '../types';
-import { getCategoryStyle, copyText, I18N } from '../utils';
+import { getCategoryStyle, formatCategory, I18N } from '../utils';
 
 interface ExpertCardProps {
   expert: ExpertSummary;
@@ -22,20 +22,9 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
   onToggleSelect,
   onNotify,
 }) => {
-  const [copied, setCopied] = useState(false);
   const [imgError, setImgError] = useState(false);
   const t = I18N[lang];
   const catStyle = getCategoryStyle(expert.category);
-
-  const handleCopy = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const ok = await copyText(expert.install.npx);
-    if (ok) {
-      setCopied(true);
-      onNotify(`${lang === 'en' ? 'Copied' : '已复制'}: ${expert.install.npx}`);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
 
   return (
     <div
@@ -50,7 +39,7 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
         {/* Top bar: Category + Select toggle */}
         <div className="flex items-center justify-between mb-4">
           <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${catStyle.badge}`}>
-            {expert.category}
+            {formatCategory(expert.category, lang)}
           </span>
 
           <button
@@ -154,24 +143,11 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
               e.stopPropagation();
               onOpenDetail(expert);
             }}
-            title={lang === 'en' ? 'Inspect Skills & Models' : '查看完整思维模型与规则'}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs transition-colors"
+            title={lang === 'en' ? 'Inspect Scholar Blueprint' : '查看学者思想档案'}
+            className="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
           >
-            <Brain className="w-4 h-4 text-purple-400" />
-          </button>
-
-          {/* Copy npx command */}
-          <button
-            type="button"
-            onClick={handleCopy}
-            title={expert.install.npx}
-            className={`p-2 rounded-xl border text-xs font-medium transition-all ${
-              copied
-                ? 'bg-emerald-500 text-slate-950 border-emerald-400'
-                : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800 hover:border-slate-700'
-            }`}
-          >
-            {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            <Brain className="w-3.5 h-3.5 text-purple-400" />
+            <span>{lang === 'en' ? 'Blueprint' : '档案'}</span>
           </button>
         </div>
       </div>

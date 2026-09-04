@@ -19,7 +19,7 @@ import {
   Terminal,
 } from 'lucide-react';
 import { ExpertSummary, ExpertDetail, Language, ChatMessage, LLMSettings, Category } from '../types';
-import { getCategoryStyle, copyText, I18N } from '../utils';
+import { getCategoryStyle, copyText, I18N, formatCategory, formatCategoryShort } from '../utils';
 import { streamChatResponse } from '../services/llm';
 
 interface ChatWorkspaceProps {
@@ -275,7 +275,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                     : 'bg-slate-800 text-slate-400 hover:text-slate-200'
                 }`}
               >
-                {cat === 'All' ? '全部' : cat.split(' ')[0]}
+                {formatCategoryShort(cat, lang)}
               </button>
             ))}
           </div>
@@ -357,7 +357,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                   {activeSummary.name}
                 </h2>
                 <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${catStyle.badge}`}>
-                  {activeSummary.category}
+                  {formatCategory(activeSummary.category, lang)}
                 </span>
               </div>
               <p className="text-xs text-slate-400 truncate">
@@ -570,10 +570,6 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                   {lang === 'en' ? 'Change' : '切换/配置'}
                 </span>
               </button>
-
-              <div className="hidden sm:block font-mono">
-                npx skills add K-Dense-AI/mimeographs/{activeSummary.slug}
-              </div>
             </div>
           </div>
         </div>
@@ -585,7 +581,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
           <div className="p-4 border-b border-slate-800 flex items-center justify-between shrink-0">
             <h3 className="font-bold text-sm text-white flex items-center gap-2">
               <Brain className="w-4 h-4 text-purple-400" />
-              <span>{lang === 'en' ? 'Mind Blueprint' : '专家思维模型蓝图'}</span>
+              <span>{lang === 'en' ? 'Scholar Mind Blueprint' : '学者思维模型蓝图'}</span>
             </h3>
             <button
               onClick={() => setShowSpecsDrawer(false)}
@@ -600,7 +596,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
             <div>
               <h4 className="font-bold text-cyan-300 uppercase tracking-wider text-[11px] mb-2.5 flex items-center gap-1.5">
                 <Brain className="w-3.5 h-3.5" />
-                <span>{lang === 'en' ? 'Mental Models' : '心智模型 (Mental Models)'}</span>
+                <span>{lang === 'en' ? 'Mental Models' : '心智模型'}</span>
               </h4>
               <div className="space-y-2.5">
                 {expertDetail.mental_models.map((mm, i) => (
@@ -618,7 +614,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
             <div>
               <h4 className="font-bold text-purple-300 uppercase tracking-wider text-[11px] mb-2.5 flex items-center gap-1.5">
                 <Cpu className="w-3.5 h-3.5" />
-                <span>{lang === 'en' ? 'Decision Frameworks' : '决策框架 (Frameworks)'}</span>
+                <span>{lang === 'en' ? 'Decision Frameworks' : '决策框架'}</span>
               </h4>
               <div className="space-y-2.5">
                 {expertDetail.frameworks.map((fw, i) => (
@@ -636,7 +632,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
             <div>
               <h4 className="font-bold text-emerald-300 uppercase tracking-wider text-[11px] mb-2.5 flex items-center gap-1.5">
                 <BookOpen className="w-3.5 h-3.5" />
-                <span>{lang === 'en' ? 'Core Principles' : '核心原则 (Principles)'}</span>
+                <span>{lang === 'en' ? 'Core Principles' : '核心原则'}</span>
               </h4>
               <div className="space-y-2.5">
                 {expertDetail.principles.map((pr, i) => (
@@ -648,20 +644,6 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* Always-on System Prompt button */}
-            <div className="pt-2 border-t border-slate-800">
-              <button
-                onClick={() => {
-                  copyText(expertDetail.agents.full);
-                  onNotify(lang === 'en' ? 'Copied AGENTS.md!' : '已复制 AGENTS.md 全文！');
-                }}
-                className="w-full py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold flex items-center justify-center gap-1.5 border border-slate-700"
-              >
-                <FileCode className="w-3.5 h-3.5" />
-                <span>{lang === 'en' ? 'Copy System Prompt (AGENTS.md)' : '复制完整系统提示词 (AGENTS.md)'}</span>
-              </button>
             </div>
           </div>
         </aside>

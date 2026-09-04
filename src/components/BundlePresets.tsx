@@ -74,7 +74,7 @@ export const BundlePresets: React.FC<BundlePresetsProps> = ({
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <span>{t.presetBundles}</span>
             <span className="text-xs font-normal text-slate-400">
-              ({lang === 'en' ? 'Click to select team for batch install or council' : '点击直接选中整组，一键安装或圆桌对话'})
+              ({lang === 'en' ? 'Click to select team for council debate' : '点击选中该智囊团，直接开启圆桌研讨'})
             </span>
           </h2>
         </div>

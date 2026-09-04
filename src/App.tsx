@@ -5,7 +5,6 @@ import { BundlePresets } from './components/BundlePresets';
 import { CatalogSection } from './components/CatalogSection';
 import { ExpertModal } from './components/ExpertModal';
 import { CouncilRoom } from './components/CouncilRoom';
-import { HowToUse } from './components/HowToUse';
 import { BatchDock } from './components/BatchDock';
 import { Toast } from './components/Toast';
 import { Footer } from './components/Footer';
@@ -22,7 +21,7 @@ export function App() {
   });
 
   // Default to 'chat' for immediate conversational experience!
-  const [activeTab, setActiveTab] = useState<'chat' | 'catalog' | 'council' | 'guide'>('chat');
+  const [activeTab, setActiveTab] = useState<'chat' | 'catalog' | 'council'>('chat');
   const [currentChatSlug, setCurrentChatSlug] = useState<string>('steve-jobs');
   const [experts, setExperts] = useState<ExpertSummary[]>(catalogSummary.experts as ExpertSummary[]);
   const [selectedSlugs, setSelectedSlugs] = useState<string[]>([]);
@@ -47,8 +46,6 @@ export function App() {
         setActiveTab('catalog');
       } else if (hash === 'council') {
         setActiveTab('council');
-      } else if (hash === 'guide') {
-        setActiveTab('guide');
       }
     };
     handleHash();
@@ -171,11 +168,6 @@ export function App() {
             lang={lang}
             onNotify={handleNotify}
           />
-        )}
-
-        {/* 4. INTEGRATION GUIDE */}
-        {activeTab === 'guide' && (
-          <HowToUse lang={lang} onNotify={handleNotify} />
         )}
       </main>
 
