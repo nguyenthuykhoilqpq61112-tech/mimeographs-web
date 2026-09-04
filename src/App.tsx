@@ -95,7 +95,11 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div
+      className={`w-full flex flex-col bg-slate-950 text-slate-100 selection:bg-cyan-500/30 selection:text-cyan-200 ${
+        activeTab === 'chat' ? 'h-full overflow-hidden' : 'min-h-full'
+      }`}
+    >
       <Navbar
         lang={lang}
         setLang={setLang}
@@ -107,7 +111,7 @@ export function App() {
         selectedCount={selectedSlugs.length}
       />
 
-      <main className="flex-1 flex flex-col">
+      <main className={`flex-1 min-h-0 flex flex-col ${activeTab === 'chat' ? 'overflow-hidden' : ''}`}>
         {/* 1. DIRECT CHAT STUDIO */}
         {activeTab === 'chat' && (
           <ChatWorkspace

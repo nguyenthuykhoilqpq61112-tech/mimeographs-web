@@ -236,9 +236,9 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
   };
 
   return (
-    <div className="flex-1 flex h-[calc(100vh-4rem)] overflow-hidden bg-slate-950 text-slate-100">
+    <div className="w-full flex-1 min-h-0 flex overflow-hidden bg-slate-950 text-slate-100">
       {/* 1. LEFT SIDEBAR: 80 Experts List */}
-      <aside aria-label="80 Experts selection" className="w-80 border-r border-slate-800/80 bg-slate-900/50 flex flex-col shrink-0 hidden md:flex">
+      <aside aria-label="80 Experts selection" className="w-80 h-full min-h-0 border-r border-slate-800/80 bg-slate-900/50 flex flex-col shrink-0 hidden md:flex overflow-hidden">
         {/* Sidebar Header */}
         <div className="p-4 border-b border-slate-800">
           <div className="flex items-center justify-between mb-3">
@@ -282,7 +282,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
         </div>
 
         {/* Experts Scroll List */}
-        <div className="flex-1 overflow-y-auto p-2 space-y-1">
+        <div id="sidebar-experts-list" className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-2 space-y-1">
           {sidebarExperts.map((exp) => {
             const isActive = exp.slug === currentSlug;
             const cStyle = getCategoryStyle(exp.category);
@@ -331,7 +331,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
       </aside>
 
       {/* 2. MAIN CHAT AREA */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden bg-slate-950">
+      <div className="flex-1 min-w-0 h-full min-h-0 flex flex-col overflow-hidden bg-slate-950">
         {/* Chat Header Bar */}
         <div className="h-16 px-4 sm:px-6 border-b border-slate-800 bg-slate-900/60 backdrop-blur flex items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
@@ -400,7 +400,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
         </div>
 
         {/* Message Scrollable Container */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+        <div id="chat-messages-container" className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 sm:p-6 space-y-6">
           {/* Welcome Screen if empty */}
           {messages.length === 0 && (
             <div className="max-w-2xl mx-auto pt-6 sm:pt-12 text-center animate-fadeIn">
@@ -581,8 +581,8 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
 
       {/* 3. RIGHT SLIDEOUT DRAWER: Mind Specs & Blueprint */}
       {showSpecsDrawer && expertDetail && (
-        <aside aria-label="Mind blueprint and specs" className="w-96 border-l border-slate-800 bg-slate-900/95 backdrop-blur-xl flex flex-col shrink-0 animate-slideLeft z-30">
-          <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+        <aside aria-label="Mind blueprint and specs" className="w-96 h-full min-h-0 border-l border-slate-800 bg-slate-900/95 backdrop-blur-xl flex flex-col shrink-0 animate-slideLeft z-30 overflow-hidden">
+          <div className="p-4 border-b border-slate-800 flex items-center justify-between shrink-0">
             <h3 className="font-bold text-sm text-white flex items-center gap-2">
               <Brain className="w-4 h-4 text-purple-400" />
               <span>{lang === 'en' ? 'Mind Blueprint' : '专家思维模型蓝图'}</span>
@@ -595,7 +595,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-5 text-xs">
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 space-y-5 text-xs">
             {/* Mental Models */}
             <div>
               <h4 className="font-bold text-cyan-300 uppercase tracking-wider text-[11px] mb-2.5 flex items-center gap-1.5">
