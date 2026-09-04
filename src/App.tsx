@@ -10,6 +10,7 @@ import { BatchDock } from './components/BatchDock';
 import { Toast } from './components/Toast';
 import { Footer } from './components/Footer';
 import { ExpertSummary, Language } from './types';
+import catalogSummary from './data/summary.json';
 
 export function App() {
   const [lang, setLang] = useState<Language>(() => {
@@ -18,8 +19,8 @@ export function App() {
   });
 
   const [activeTab, setActiveTab] = useState<'catalog' | 'council' | 'guide'>('catalog');
-  const [experts, setExperts] = useState<ExpertSummary[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Initialize synchronously with pre-bundled catalog summary
+  const [experts, setExperts] = useState<ExpertSummary[]>(catalogSummary.experts as ExpertSummary[]);
   const [selectedSlugs, setSelectedSlugs] = useState<string[]>([]);
   const [selectedExpertForModal, setSelectedExpertForModal] = useState<ExpertSummary | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -27,37 +28,6 @@ export function App() {
   useEffect(() => {
     localStorage.setItem('mimeo_lang', lang);
   }, [lang]);
-
-  useEffect(() => {
-    fetch('./data/summary.json')
-      .then((res) => res.json())
-      .then((data) => {
-        setExperts(data.experts || []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Failed to load summary.json, attempting fallback', err);
-        // In case running in environment without server yet
-        import('./data/experts.json').then((module) => {
-          const fallbackList: ExpertSummary[] = module.default.experts.map((exp: any) => ({
-            slug: exp.slug,
-            name: exp.name,
-            category: exp.category,
-            summary: exp.summary,
-            description: exp.description,
-            avatar: exp.avatar,
-            install: exp.install,
-            tags: exp.tags.slice(0, 8),
-            top_quote: exp.quotes?.[0]?.quote || '',
-            principles_count: exp.principles?.length || 0,
-            mental_models_count: exp.mental_models?.length || 0,
-            frameworks_count: exp.frameworks?.length || 0,
-          }));
-          setExperts(fallbackList);
-          setLoading(false);
-        });
-      });
-  }, []);
 
   const handleNotify = (msg: string) => {
     setToastMessage(msg);
