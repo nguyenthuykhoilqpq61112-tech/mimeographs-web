@@ -1,0 +1,5 @@
+name = "mimeographs-web"
+compatibility_date = "2026-09-01"
+
+[pages]
+directory = "dist"
