@@ -5,11 +5,6 @@ export interface ExpertSummary {
   summary: string;
   description: string;
   avatar: string;
-  install: {
-    npx: string;
-    gh: string;
-    manual: string;
-  };
   tags: string[];
   top_quote: string;
   principles_count: number;
