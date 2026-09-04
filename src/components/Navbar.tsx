@@ -2,7 +2,6 @@ import React from 'react';
 import { Sparkles, Users, BookOpen, Globe, MessageSquare } from 'lucide-react';
 import { Language } from '../types';
 import { I18N } from '../utils';
-import { GithubIcon } from "./GithubIcon";
 
 interface NavbarProps {
   lang: Language;
@@ -114,17 +113,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Globe className="w-3.5 h-3.5 text-cyan-400" />
             <span>{lang === 'en' ? '中文' : 'EN'}</span>
           </button>
-
-          {/* GitHub Upstream */}
-          <a
-            href="https://github.com/K-Dense-AI/mimeographs"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white bg-slate-900 hover:bg-slate-800 rounded-lg border border-slate-700/80 transition-all group"
-          >
-            <GithubIcon className="w-4 h-4 text-slate-300 group-hover:scale-110 transition-transform" />
-            <span className="hidden md:inline">GitHub</span>
-          </a>
         </div>
       </div>
     </header>
