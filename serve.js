@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DIST = path.join(__dirname, 'dist');
-const PORT = process.env.PORT || 8088;
+const PORT = parseInt(process.env.PORT || '8080', 10);
 
 const MIME = {
   '.html': 'text/html; charset=UTF-8',
@@ -45,5 +45,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Mimeographs Web is running at http://0.0.0.0:${PORT}`);
+  console.log(`ScholarMind Web is running at http://0.0.0.0:${PORT}`);
 });
